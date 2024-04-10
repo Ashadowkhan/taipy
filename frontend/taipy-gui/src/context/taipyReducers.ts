@@ -627,7 +627,8 @@ export const createRequestInfiniteTableUpdateAction = (
     handleNan?: boolean,
     filters?: Array<FilterDesc>,
     compare?: string,
-    compareDatas?: string
+    compareDatas?: string,
+    reverse?: boolean
 ): TaipyAction =>
     createRequestDataUpdateAction(name, id, context, columns, pageKey, {
         infinite: true,
@@ -643,6 +644,7 @@ export const createRequestInfiniteTableUpdateAction = (
         filters: filters,
         compare: compare,
         compare_datas: compareDatas,
+        reverse: !!reverse,
     });
 
 /**

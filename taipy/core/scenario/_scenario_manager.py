@@ -29,8 +29,8 @@ from ..exceptions.exceptions import (
     DifferentScenarioConfigs,
     DoesNotBelongToACycle,
     InsufficientScenarioToCompare,
+    InvalidScenario,
     InvalidSequence,
-    InvalidSscenario,
     NonExistingComparator,
     NonExistingScenario,
     NonExistingScenarioConfig,
@@ -180,7 +180,7 @@ class _ScenarioManager(_Manager[Scenario], _VersionMixin):
         cls._set(scenario)
 
         if not scenario._is_consistent():
-            raise InvalidSscenario(scenario.id)
+            raise InvalidScenario(scenario.id)
 
         actual_sequences = scenario._get_sequences()
         for sequence_name in sequences.keys():
@@ -416,7 +416,7 @@ class _ScenarioManager(_Manager[Scenario], _VersionMixin):
         submissions = _SubmissionManagerFactory._build_manager()._get_all()
         submitted_entity_ids = list(entity_ids.scenario_ids.union(entity_ids.sequence_ids, entity_ids.task_ids))
         for submission in submissions:
-            if submission.entity_id in submitted_entity_ids:
+            if submission.entity_id in submitted_entity_ids or submission.entity_id == scenario.id:
                 entity_ids.submission_ids.add(submission.id)
 
         return entity_ids

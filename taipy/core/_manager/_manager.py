@@ -154,11 +154,18 @@ class _Manager(Generic[EntityType]):
         _SubmissionManagerFactory._build_manager()._delete_many(_entity_ids.submission_ids)
 
     @classmethod
-    def _export(cls, id: str, folder_path: Union[str, pathlib.Path]):
+    def _export(cls, id: str, folder_path: Union[str, pathlib.Path], **kwargs):
         """
         Export an entity.
         """
         return cls._repository._export(id, folder_path)
+
+    @classmethod
+    def _import(cls, entity_file: pathlib.Path, version: str, **kwargs):
+        imported_entity = cls._repository._import(entity_file)
+        imported_entity._version = version
+        cls._set(imported_entity)
+        return imported_entity
 
     @classmethod
     def _is_editable(cls, entity: Union[EntityType, str]) -> bool:
